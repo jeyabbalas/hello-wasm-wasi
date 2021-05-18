@@ -4,7 +4,6 @@
 
 # Cloud Native :cloud: Wasm Day :spider_web: (4th May 2021) - Part II
 
-<hr>
 
 ## Lightning Talks
 
@@ -85,7 +84,7 @@
 
 3. **Bindle**: Unlike cloud storage and Docket's OCI Images, Bindle can capture complex object relationships. It is composed of 2 parts— 1) invoice (metadata: name, version, authors, list of parcels, group parcel, signature), and 2) parcels (objects: a blob).
 
-   <img src="/Users/jeya/Documents/projects/learn/wasm/CNCF Cloud Wasm Day/images/bindle.png" alt="bindle" style="zoom:30%;" />
+   <img src="./images/bindle.png" alt="bindle" style="zoom:30%;" />
 
 4. **Features and Groups**: link a file with all it's related files (e.g., dependencies in a project like *.html, *.css, and *.js.).
 
@@ -101,7 +100,6 @@
    * <u>Light wasm</u>: run on resource poor environment.
    * Retrieve appropriate file according to environment.
 
-<hr>
 
 ## Serverless WebAssembly for compute-intensive workloads
 
@@ -143,7 +141,6 @@
    * 128 MB <u>RAM limit</u>.
    * 30 seconds <u>CPU limit</u>.
 
-<hr>
 
 ## Machine Learning with Wasm (wasi-nn)
 
@@ -151,7 +148,6 @@
 
 
 
-<hr>
 
 ## WebAssembly: The future of distributed computing
 
@@ -171,11 +167,11 @@
 
 1. The figure below shows [the Edge continuum according to the Linux Foundation Edge](https://www.lfedge.org/wp-content/uploads/2020/07/LFedge_Whitepaper.pdf). This includes a variety of device types, architectures, and capabilities. The edge ecosystem is quite complex.
 
-![edge_continuum](/Users/jeya/Documents/projects/learn/wasm/CNCF Cloud Wasm Day/images/edge_continuum.png)
+![edge_continuum](./images/edge_continuum.png)
 
 2. Evolution of a declarative (highly decoupled) world over time. More and more of the platform (blue) is being abstracted away, leaving the developer (green) to focus only on the app logic. Wasm has expanded the <u>applicability of the technology across the distributed continuum</u>, while also improving security and portability.
 
-![tech_evolution](/Users/jeya/Documents/projects/learn/wasm/CNCF Cloud Wasm Day/images/tech_evolution.png)
+![tech_evolution](./images/tech_evolution.png)
 
 3. **Examples of Wasm technology across the distributed continuum**
    * <u>Decentralized Data Centers</u>: [wasmCloud](https://github.com/wasmCloud/wasmCloud) (execution of microservices on servers), [Krustlet](https://github.com/deislabs/krustlet) (orchestration service).
@@ -188,4 +184,3 @@
    * <u>Offline use</u>. Wasm's security, portability, and speed, all come into play.
    * <u>Distributed machine learning</u>. TensorFlow.js brings machine learning in browser with Wasm backend. Wasi-nn brings machine learning to Wasmtime.
 
-<hr>

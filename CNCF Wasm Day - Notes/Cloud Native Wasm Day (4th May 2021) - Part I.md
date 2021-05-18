@@ -1,6 +1,5 @@
 # Cloud Native :cloud: Wasm Day :spider_web: (4th May 2021) - Part I
 
-<hr>
 
 ## Opening Remarks
 
@@ -28,7 +27,6 @@
 2. CNCF has adopted Wasm technology in its [Envoy project](https://github.com/envoyproxy/envoy), an edge and service network proxy. They subsituted Lua to Wasm because Wasm was a much more lighter subsitute for the heavyweight Lua.
 3. Microsoft has been developing [Krustlet](https://github.com/deislabs/krustlet), a Kubernetes engine that allows you to run Wasm workloads on a Kubernetes cluster.
 
-<hr>
 
 ## WASI: A new kind of system interface and what it means for Cloud Native
 
@@ -73,7 +71,6 @@
 1. Three approaches (gradual adoption path) to compile a module to use WASI.
    * <u>Legacy Wasm code</u>: already follows bad practices from traditional file system APIs. It makes assumptions about the host OS. Use the `legacy file system interface` compiler flag.
 
-<hr>
 
 ## From napkin to the Cloud: A WebAssembly journey
 
@@ -97,7 +94,7 @@
 
 2. <u>Big idea</u>: Users log-in either through the Telnet channel or the broker channel. The chat services provided are: authorization & authentication, presence (who is online? how long have they been online?), chatrooms, and messages.
 
-   <img src="/Users/jeya/Documents/projects/learn/wasm/CNCF Cloud Wasm Day/images/napkin.png" alt="napkin" style="zoom:30%;" />
+   <img src="./images/napkin.png" alt="napkin" style="zoom:30%;" />
 
 3. <u>Typical journey</u>: idea :bulb: --> initial design (napkin) --> early experimentation --> redesign architecture --> refactoring/redesign --> despair :sob: .
 
@@ -115,7 +112,6 @@
    * Entire application is only 702 KB.
 4. <u>Summary</u>: when compared to the microservices approach, the wasmCloud approach significantly reduced the distance between the napkin and the cloud.
 
-<hr>
 
 ## AI inference on the Edge Cloud using WebAssembly
 
@@ -155,7 +151,6 @@
 
 An open source (donated to CNCF) Wasm VM
 
-<hr>
 
 ## Wasm in the Wild West: A Practical Application Tale
 
@@ -218,7 +213,7 @@ An open source (donated to CNCF) Wasm VM
    * [Lua](http://www.lua.org/): Embeddable scripting language. Not polyglot.
 3. Wasm sufficiently addresses all these concerns and is fast.
 
-<img src="/Users/jeya/Documents/projects/learn/wasm/CNCF Cloud Wasm Day/images/wasm-benefits.png" alt="wasm-benefits" style="zoom:45%;" />
+<img src="./images/wasm-benefits.png" alt="wasm-benefits" style="zoom:45%;" />
 
 ### Impact of Wasm on application security and extensibility
 
@@ -226,7 +221,6 @@ An open source (donated to CNCF) Wasm VM
 2. [Proxy-wasm](https://github.com/proxy-wasm) project provided the community with extensibility interfaces in Rust and C++, which enabled Envoy and Istio's language-independent implementation of proxy services that run on isolated environments and perform network proxy tasks like security and traffic management. 
 3. This way, in the cloud-native world, wasm has enabled developers to create their own custom and secure extensions to Istio and Envoy for their application service mesh.
 
-<hr>
 
 ## WebAssembly as a cloud-native runtime for serverless functions
 
@@ -257,7 +251,7 @@ An open source (donated to CNCF) Wasm VM
    * Provides powerful <u>WASI-like extensions</u> for ML (TensorFlow, ONNX, Tengine), storage, command line interface, and blockchain (Etherum, Substrate).
 4. [SSVM (Wasm runtime) Vs. Docker+Native (C/C++ compiled for the guest OS in Docker) Vs. Docker+Node.js (heavy stack to use JS)](https://arxiv.org/pdf/2010.07115.pdf).
 
-<img src="/Users/jeya/Documents/projects/learn/wasm/CNCF Cloud Wasm Day/images/ssvm_vs_docker.png" alt="ssvm_vs_docker" style="zoom:25%;" />
+<img src="./images/ssvm_vs_docker.png" alt="ssvm_vs_docker" style="zoom:25%;" />
 
 3. <u>Applications</u>: Jamstack web apps, SaaS and PaaS, IoT device and cars, and blockchain smart contracts.
 4. **Benefits of Wasm VM**
@@ -268,7 +262,6 @@ An open source (donated to CNCF) Wasm VM
    * <u>Manageability</u>. It's a container that can be managed using Kubernetes and KubeEdge. 
 5. [Demo for AI](https://www.secondstate.io/tags/ai/).
 
-<hr>
 ## Concepts
 
 ### What is a Service Mesh? E.g. Istio
