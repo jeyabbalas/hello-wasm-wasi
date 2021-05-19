@@ -1,6 +1,19 @@
 # Cloud Native :cloud: Wasm Day :spider_web: (4th May 2021) - Part I
 
 
+
+## Table of Contents
+
+1. [Opening Remarks](##opening-remarks)
+2. [WASI: A new kind of system interface and what it means for Cloud Native](##wasi-a-new-kind-of-system-interface-and-what-it-means-for-cloud-native)
+3. [From napkin to the Cloud: A WebAssembly journey](##from-napkin-to-the-cloud-a-webassembly-journey)
+4. [AI inference on the Edge Cloud using WebAssembly](##ai-inference-on-the-edge-cloud-using-webassembly)
+5. [Wasm in the Wild West: A Practical Application Tale](##wasm-in-the-wild-west-a-practical-application-tale)
+6. [What can WebAssembly do for your Application Security and Extensibility](##what-can-webassembly-do-for-your-application-security-and-extensibility)
+7. [WebAssembly as a cloud-native runtime for serverless functions](##webassembly-as-a-cloud-native-runtime-for-serverless-functions)
+
+
+
 ## Opening Remarks
 
 ### Speakers
@@ -36,40 +49,42 @@
 
 ### Why?
 
-1. Common problems in Wasm and Cloud-native communities—
+1. **Common problems** in Wasm and Cloud-native communities—
    * Dealing with code that depends on the <u>concept of a file system</u> in a place where there is no file system.
-   * How do you separate the business logic of an app and the orchestration of that app?
+   * <u>Separating the business logic from the orchestration</u> of that app.
 
 ### Why was WASI created?
 
-1. To enable languages other than JS to run on browsers at <u>near-native speeds</u>. 
-2. Run the code in a <u>well-isolated, secure sandbox</u> because you need to trust what you download from the internet.
-3. For speed, the language needs to be close to the user's native instruction set architecture or ISA (e.g., x86, Arm64, etc.) but without specializing to any specific architecture. Wasm created a low-layered abstraction over these architectures. This makes Wasm <u>portable</u>.
-4. The lightweightness and portability appealed to non-browser communities. But these users started <u>compromising Wasm's security and portability</u>. They gave the Wasm binaries full access to OS call library. Unsafe and ties you to the OS. So, we need both an abstract ISA and an abstract OS!
-5. **WASI**: a modular set of system interfaces. It includes the usual low-level system interfaces but also some high-level ones (e.g., neural networks)
+1. Enable <u>languages other than JS</u> to run on browsers at near-native speeds. 
+2. Needs to run in a <u>well-isolated, secure sandbox</u> because you can't trust the internet.
+3. To be fast, the language binary should be close to the user's native ISA (instruction set architecture e.g., x86, Arm64, RISC-V, etc.) but without specializing to any specific ISA. Wasm created a low-layered abstraction over these ISAs. This makes Wasm <u>portable</u>.
+4. Portability motivated <u>out-of-browser applications</u>.
+5. But these applications <u>compromised security and portability</u> by giving Wasm full access to OS syscall library. This is unsafe and ties you to the OS. We need both an abstract ISA and an abstract OS.
+6. **WASI**: a modular set of system interfaces. It includes the usual low-level system interfaces but also some high-level ones (e.g., neural networks, crypto, etc.).
 
-### Concept of file systems
+### Challenge: Concept of file systems
 
-1. Today, having direct access to the file system is the exception than the rule.
-   * <u>Browser apps</u>: they are apps that run within other apps. To protect users from malicious code, these apps don't have direct access to the user's file system.
-   * <u>Cloud compute</u>: cloud system decouples storage from compute.
-   * <u>Edge devices</u>: too lightweight to support a file system.
-   * FAIR systems.
+1. Today, having <u>direct access to the file system</u> is the exception than the rule. Examples— apps on the browser, cloud, edge, FAIRified, etc.
+2. Components of a file—
+   * <u>Data</u>: an array or stream of data. 
+   * <u>Metadata</u>: data about data e.g., filename, time stamps, permissions, storage device information, etc. These are specific to the OS of the host. Very few programs care about this.
+3. <u>Compute</u>: working with data. <u>Metacompute</u>: working with metadata. Push metacompute to the edge as much as possible.
+4. <u>Example</u>: a commandline app that shrinks an image file. 
+   * <u>File system-centric paradigm</u>: the Wasm module runs from inside a secure sandbox in the host system. Input argument: filename. Wasm module uses the filename to make an open syscall and obtain a file handle from the OS. Then the wasm module uses the handle to read a stream of bytes. Here, the wasm module needs to know about the native file system. 
+   * <u>Pushing the metacompute to the edge</u>: the module runs `main(Stream) -> Result(Stream, Error)`. When run on command line the OS knows that the module needs a `Stream`. OS knows how to convert a file into a `Stream` (open the file handle). So, the host sends the `Stream` directly. Wasm doesn't need to know about the host OS. This design is more portable. It is also more secure (Wasm didn't need to make a syscall).
 
-### What?
+### Gradual adoption paths to use WASI with security and portability
 
-1. What is a file? It has two components—
-   * <u>Data</u>: an array or stream of data. Most programs only need this.
-   * <u>Metadata</u>: data about that data e.g., filename, time stamps, permissions, *storage device information*, etc. When working with metadata, you need to know the conventions of the host system. Few programs need this info (e.g., creating file backups).
-2. <u>Compute</u>: working with data. <u>Metacompute</u>: working with metadata. Push metacompute to the edge.
-3. <u>Example</u>: a commandline app that shrinks an image file. 
-   * <u>File system-centric paradigm</u>: The Wasm module runs from inside a secure sandbox in the host system. The wasm module accepts an array of string arguments, one of which is a filename. Wasm module uses the filename to make an open sys call. The OS returns a handle to the file to the wasm module. Then the wasm module uses the handle to read a stream of bytes. Here, the wasm module needs to know about the native file system. 
-   * <u>Pushing the metacompute to the edge</u>: Say, the module runs `main(Stream) -> Result(Stream, Error)`. When the host sees this function, it knows that the module needs a `Stream`. And it knows how to convert a file into a `Stream` (open the file handle). So, the host sends the `Stream` directly. Wasm doesn't need to know about the host OS. This design is more portable. It is also more secure (Wasm didn't need to make a sys call).
+1. <u>Legacy Wasm code</u>: already follows bad practices from traditional file system APIs. It makes assumptions about the host OS. Use the `legacy file system interface` compiler flag. This will link your code in terms of WASI's file system interface (like POSIX APIs). Doesn't use virtualized file system, so it isn't fully portable. The code won't run in places where the host doesn't provide direct access to the file system.
+2. <u>Compatibility layer</u>: Users still use file APIs from their language library. The module implicitly virtualizes the file system and stores in linear memory. The file types are WASI IO types. Very portable but generates larger file size.
+3. <u>Use WASI IO APIs directly</u>: Uses code using WASI IO APIs directly. Write functions using IO types like `Streams` and not in terms of the file system. This code is very portable.
 
-### How?
+### Opportunity for cloud-native
 
-1. Three approaches (gradual adoption path) to compile a module to use WASI.
-   * <u>Legacy Wasm code</u>: already follows bad practices from traditional file system APIs. It makes assumptions about the host OS. Use the `legacy file system interface` compiler flag.
+1. Making a request from one container in one pod to another container in another pod is highly inefficient.
+2. It involves making 5 copies of data in each of the sender and the receiver pod. This is mainly because the service container is isolated from the sidecar container.
+3. Substitute the communication with a synchronous function call. Prevents the need for intermediate serialization/deserialization.
+4. Reduces the communication time to nanoseconds.
 
 
 ## From napkin to the Cloud: A WebAssembly journey

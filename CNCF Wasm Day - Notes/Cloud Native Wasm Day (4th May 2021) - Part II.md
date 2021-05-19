@@ -1,8 +1,19 @@
-
-
-
-
 # Cloud Native :cloud: Wasm Day :spider_web: (4th May 2021) - Part II
+
+
+
+## Table of Contents
+
+1. [Lightning Talks](##lightning-talks)
+   * [Migrating from JavaScript to WebAssembly (in the browser)](###migrating-from-javascript-to-webassembly-in-the-browser)
+   * [Building web services for a future based on WebAssembly](###building-web-services-for-a-future-based-on-webassembly)
+   * [Build trusted cloud apps with Wasm: WebAssembly Micro Runtime is ready](###build-trusted-cloud-apps-with-wasm-webassembly-micro-runtime-is-ready)
+   * [Storing WebAssembly Modules with Bindle](###storing-webassembly-modules-with-bindle)
+
+2. [Serverless WebAssembly for compute-intensive workloads](##serverless-webassembly-for-compute-intensive-workloads)
+3. [Machine Learning with Wasm (wasi-nn)](##machine-learning-with-wasm-wasi-nn)
+4. [WebAssembly: The future of distributed computing](##webassembly-the-future-of-distributed-computing)
+
 
 
 ## Lightning Talks
@@ -148,7 +159,7 @@
 
 1. Andrew Brown is a Senior Software Engineer and Mingqiu Sun is a Senior Principal Engineer at Intel.
 
-### Introduction to wasi-nn
+### wasi-nn
 
 1. WASI is a secure, portable, and modular system interface for Wasm. It is maintained by the [Bytecode Alliance](https://bytecodealliance.org/).
 2. wasi-nn (currently in phase 2) is the WASI module for <u>accelerating neural networks</u>. It is implemented on <u>wasmtime</u>.
@@ -158,20 +169,30 @@
    * ML requires access to <u>special hardware</u> (e.g., GPUs, TPUs).
    * <u>Wasm has limited parallelism</u> (via 128-bit SIMD).
    * WASI provides significant performance improvement over Wasm.
-5. **Wasm environments**—
-   * Standalone Wasm VM:
-   * Browser:
-   * Node.js:
+5. **Wasm runtime environments**—
+   * <u>Standalone</u>: Apps are run on a Wasm VM that can make WASI API calls (for WASI-nn). Suitable for resource constrained environments.
+   * <u>Browser</u>: Apps are run on a JS VM with Wasm embedded into it. Apps have access to Web APIs via JS (for webNN).
+   * <u>Node.js</u>: Apps are run on a JS VM with Wasm embedded into it. Apps have access to both Web APIs and WASI APIs. Not resource constrained.
 
 ### Wasi-nn design
 
-
+1. <u>Model loader API</u>:
+   * Inferencing is the main ML use case.
+   * Simpler API than builder. Features are more complete.
+   * Model format/DL framework agnostic.
+   * Supports CPU, GPU, TPUs.
+2. <u>Model builder API (second phase)</u>:
+   * [Proposed for phase 2](https://github.com/WebAssembly/wasi-nn/blob/main/docs/Proposals.md), will be under development for a couple of years.
+   * Needs to compile the whole ML framework to Wasm.
+3. ML model is specified as a virtualized IO types to make them framework-agnostic.
+4. **Current frameworks supported**: only OpenVINO. TF and ONNX aren't supported yet.
 
 ### How to write an app with WASI-nn
 
+<img src="/Users/jeya/Documents/projects/learn/wasm/hello-wasm-wasi/CNCF Wasm Day - Notes/images/wasi_nn.png" alt="wasi_nn" style="zoom:30%;" />
 
-
-
+1. <u>Demo</u>: https://github.com/bytecodealliance/wasmtime/blob/03077e0de9bc5bb92623d58a1e5d78b828fd1634/crates/wasi-nn/README.md
+2. Compared wasi-nn with wasm-exclusive approach (TF.js) to find wasi-nn run much faster.
 
 
 ## WebAssembly: The future of distributed computing
