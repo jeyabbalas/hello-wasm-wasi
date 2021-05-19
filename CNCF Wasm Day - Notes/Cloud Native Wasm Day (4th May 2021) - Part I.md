@@ -131,25 +131,29 @@
 2. **Native apps on the edge**: They are fast but tied to native OS and architecture (not portable). Don’t support web frameworks. Vulnerable to attacks (not secure). Need OS-level access control (not safe).
 3. **WebAssembly via Rust**: Wasm is fast, is a secure sandbox, is language-agnostic, and has strong community support. Rust is safe and both time- and memory-efficient. Most compute intensive task in AI inference is pre-/post-processing and Rust can help speed it up considerably.
 
-### Running TensorFlow inference with Wasm
+### [SSVM (now called WasmEdge)](https://github.com/WasmEdge/WasmEdge)
 
-1. **Scenario 1: Interpreted mode on a CPU**: [Read your TF model using TF operators written in Rust or C/C++](https://github.com/sonos/tract). Compile it to Wasm. Execute in interpreter mode on CPU. 
+1. An open-source Wasm VM for <u>performance-intensive server-side applications</u>.
+
+### Wasm approaches to TensorFlow inference
+
+1. **Scenario 1: Interpreted mode on a CPU**: [Read your pre-built TF model (`*.pb`) using TF operators written in Rust or C/C++ (`tract`)](https://github.com/sonos/tract). Compile it to Wasm. Execute in interpreter mode on CPU. 
    * Easy to run. 
-   * Latency: Very slow! A single inference using MobileNet takes 10+ minutes to run on a modern Intel CPU.
-2. **Scenario 2: Using just-in-time (JIT) compilers**: Read your TF model using TF operators written in Rust or C/C++. Compile to Wasm. Execute in a JIT runtime (e.g. V8).
-   * Latency: Single inference takes 2-3 seconds. 
-   * Example: [TF.js](https://github.com/tensorflow/tfjs). Uses TF's C runtime to compile to Wasm. Loaded into a JS application. Run in the browser.
-3. **Scenario 3: Compile TF model directly into Wasm**: Previous two scenarios we only read a pre-built model. Here, we write the model and compile to Wasm. So, at runtime TF ops don't have to be converted into Wasm ops.
-   * Latency: Single inference takes 1-2 seconds.
+   * <u>Latency</u>: Very slow. A single inference using MobileNetV2 takes <u>10+ minutes</u> to run on a modern Intel CPU.
+   * <u>Example</u>: https://github.com/second-state/rust-wasm-ai-demo
+2. **Scenario 2: Using JIT compilers**: Read your pre-built TF model using TF operators written in Rust or C/C++. Compile to Wasm. Execute in a JIT runtime (e.g. browser V8).
+   * <u>Latency</u>: Single inference takes <u>2-3 seconds</u>. 
+   * <u>Example</u>: [TF.js](https://github.com/tensorflow/tfjs/tree/master/tfjs-backend-wasm). Uses TF's C runtime to compile to Wasm. Loaded into a JS application. Run in the browser.
+3. **Scenario 3: Compile TF model directly into Wasm**: Write the model and compile directly to Wasm (no intermediate  `*.pb`). So, at runtime TF ops don't have to be mapped into Wasm ops.
+   * <u>Latency</u>: Single inference takes <u>1-2 seconds</u>.
    * Hard to perform pre-/post-processing around the Wasm module containing the model.
-   * Example: [Apache TVM](https://github.com/apache/tvm) and [ONNC-Wasm](https://github.com/ONNC/onnc-wasm) (converts ONNX model into a Wasm application).
-4. **Scenario 4: Using host functions via WASI**:
-
-
-
-[SSVM (now called WasmEdge)](https://github.com/WasmEdge/WasmEdge)
-
-An open source (donated to CNCF) Wasm VM
+   * <u>Example</u>: [Apache TVM](https://github.com/apache/tvm) (TF/PyTorch/mxnet/ONNX -> Wasm) and [ONNC-Wasm](https://github.com/ONNC/onnc-wasm) (ONNX -> Wasm).
+4. **Scenario 4: Using host functions via WASI**: Python calls native C/C++ libraries of TF. It doesn't interpret/compile at runtime. Similarly, call native TF library from Wasm.
+   * <u>Latency</u>: Single inference takes <u>0.5 seconds</u>.
+   * <u>Example</u>: [WASI-tensorflow](https://www.secondstate.io/articles/wasi-tensorflow/).
+5. **Scenario 5: Use special hardware from host functions in WASI**: WASI can take advantage of special hardware (GPU, TPU), and AOT compilers. 
+   * <u>Latency</u>: Inference now takes <u>0.05 seconds</u>.
+   * <u>Example</u>: [SSVM on Tencent Serverless](https://github.com/second-state/tencent-tensorflow-scf).
 
 
 ## Wasm in the Wild West: A Practical Application Tale

@@ -144,7 +144,32 @@
 
 ## Machine Learning with Wasm (wasi-nn)
 
-### 
+### Speakers
+
+1. Andrew Brown is a Senior Software Engineer and Mingqiu Sun is a Senior Principal Engineer at Intel.
+
+### Introduction to wasi-nn
+
+1. WASI is a secure, portable, and modular system interface for Wasm. It is maintained by the [Bytecode Alliance](https://bytecodealliance.org/).
+2. wasi-nn (currently in phase 2) is the WASI module for <u>accelerating neural networks</u>. It is implemented on <u>wasmtime</u>.
+3. **Why do ML models need Wasm?** 
+   * <u>Portability</u>: ML models are deployed in a variety of architectures and OS. 
+4. **Why do ML models need WASI?**
+   * ML requires access to <u>special hardware</u> (e.g., GPUs, TPUs).
+   * <u>Wasm has limited parallelism</u> (via 128-bit SIMD).
+   * WASI provides significant performance improvement over Wasm.
+5. **Wasm environments**—
+   * Standalone Wasm VM:
+   * Browser:
+   * Node.js:
+
+### Wasi-nn design
+
+
+
+### How to write an app with WASI-nn
+
+
 
 
 
